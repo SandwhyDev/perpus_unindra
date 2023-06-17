@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      id="loader"
+      class="w-screen h-screen fixed bg-white flex flex-col items-center justify-center"
+    >
+      <img
+        src="../public/files/unindra.webp"
+        alt="logo"
+        class="w-44 h-44 object-cover animate-pulse"
+      />
+    </div>
+
+    <script>
+      window.addEventListener("load", function () {
+        var loader = document.querySelector(".loader");
+        setInterval(function () {
+          var login = window.localStorage.getItem("login");
+          if (login) {
+            window.location.href = "http://localhost/perpustakaan_universitas";
+          } else {
+            window.location.href =
+              "http://localhost/perpustakaan_universitas/login";
+          }
+        }, 3000);
+
+        // Hide the loader when the page is fully loaded
+        window.addEventListener("load", function () {
+          loader.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

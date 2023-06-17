@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="https://lms.unindra.ac.id/media_public/get_gambar/d2llSWJaazRBRUtSZ2lFQm15V3RiZi9GV3oyd09zSGdTdXlOVjVyR0Zsc20yWkxNc3J4dUNFdi9MbENKd2ZYSg=="
+      type="image/png"
+    />
+    <title>Perpustakaan UNINDRA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body
+    id="dashboard"
+    class="container mx-auto flex flex-col h-screen w-screen gap-5 bg-[#eeebf4] overflow-hidden scroll-smooth"
+  >
+    <div class="flex flex-col h-screen w-screen gap-5 bg-[#eeebf4] p-10 pt-9">
+      <div
+        class="w-full p-7 bg-white shadow-md rounded-xl gap-3 flex items-center justify-center"
+      >
+        <img
+          src="https://lms.unindra.ac.id/media_public/get_gambar/d2llSWJaazRBRUtSZ2lFQm15V3RiZi9GV3oyd09zSGdTdXlOVjVyR0Zsc20yWkxNc3J4dUNFdi9MbENKd2ZYSg=="
+          alt="logo"
+          class="w-14 h-14 object-cover"
+        />
+        <h1>Perpustakaan Universitas Indraprasta PGRI</h1>
+      </div>
+
+      <div class="w-full min-h-[547px] flex gap-5">
+        <div
+          class="w-[20%] h-full bg-white shadow-md rounded-xl flex flex-col items-center p-10 list-none"
+        >
+          <div class="menu-container" id="menu-container"></div>
+
+          <div class="flex flex-col gap-3 w-full">
+            <button
+              onclick="TambahBuku()"
+              id="btn-pinjam"
+              class="cursor-pointer bg-green-500 hidden text-white hover:bg-green-600 w-full p-2 rounded-md text-center capitalize"
+            >
+              Tambah Buku
+            </button>
+            <button
+              onclick="ButtonKeluar()"
+              id="btn-keluar"
+              class="cursor-pointer bg-red-500 hidden text-white hover:bg-red-600 w-full p-2 rounded-md text-center capitalize"
+            >
+              Keluar
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="w-full overflow-y-scroll h-full p-10 bg-white shadow-md rounded-xl"
+        >
+          <!-- DATA BUKU  -->
+          <div id="data-buku" class="w-full h-auto flex flex-wrap gap-10"></div>
+
+          <!-- FORM TAMBAH BUKU  -->
+          <div id="form-buku" class="hidden flex-col gap-3 mx-auto">
+            <h1 class="text-center">FORM TAMBAH BUKU</h1>
+
+            <form class="w-full max-w-sm flex flex-col gap-6 self-center">
+              <div class="flex flex-col gap-2">
+                <label
+                  class="block text-gray-500 mb-1 md:mb-0"
+                  for="inline-full-name"
+                >
+                  Judul
+                </label>
+
+                <input
+                  class="bg-white appearance-none border-2 rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                  id="judul"
+                  type="text"
+                />
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label
+                  class="block text-gray-500 mb-1 md:mb-0 pr-4"
+                  for="inline-password"
+                >
+                  Penulis
+                </label>
+
+                <input
+                  class="bg-white appearance-none border-2 rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                  id="penulis"
+                  type="text"
+                />
+              </div>
+
+              <div class="flex w-full gap-6">
+                <div class="flex flex-col gap-2">
+                  <label
+                    class="block text-gray-500 mb-1 md:mb-0 pr-4"
+                    for="inline-password"
+                  >
+                    Tahun Terbit
+                  </label>
+
+                  <input
+                    class="bg-white appearance-none border-2 rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                    id="tahun_terbit"
+                    type="number"
+                  />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label
+                    class="block text-gray-500 mb-1 md:mb-0 pr-4"
+                    for="inline-password"
+                  >
+                    Program Studi
+                  </label>
+
+                  <select
+                    id="Kategori"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[180px] p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option>Pilih Prodi</option>
+                    <option value="FIPPS">FIPPS</option>
+                    <option value="FMIPA">FMIPA</option>
+                    <option value="FBS">FBS</option>
+                    <option value="FTIK">FTIK</option>
+                    <option value="FB">FB</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label
+                  class="block text-gray-500 mb-1 md:mb-0 pr-4"
+                  for="inline-password"
+                >
+                  Stok
+                </label>
+
+                <input
+                  class="bg-white appearance-none border-2 rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                  id="stok"
+                  type="number"
+                />
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label
+                  class="block text-gray-500 mb-1 md:mb-0 pr-4"
+                  for="inline-password"
+                >
+                  Gambar Cover
+                </label>
+
+                <label class="relative">
+                  <input
+                    type="file"
+                    class="opacity-0 w-0 h-0 absolute z-[-1]"
+                    id="image-input"
+                  />
+
+                  <span
+                    id="file-name"
+                    class="bg-white border-2 text-gray-700 rounded w-full py-2 px-4 cursor-pointer inline-block"
+                  >
+                    Pilih Gambar</span
+                  >
+                </label>
+
+                <div id="image-preview" class="mt-4">
+                  <!-- Image preview will be displayed here -->
+                </div>
+              </div>
+
+              <div class="md:flex md:items-center">
+                <div class=""></div>
+                <div class="">
+                  <button
+                    class="shadow bg-green-500 hover:bg-green-600 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded"
+                    type="submit"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const login = window.localStorage.getItem("login");
+      const cekDashboard = document.getElementById("dashboard");
+      cekDashboard.className = login ? "flex" : "hidden";
+
+      if (!login) {
+        window.addEventListener("load", function () {
+          window.location.href =
+            "http://localhost/perpustakaan_universitas/cek";
+        });
+      }
+    </script>
+
+    <script src="./src/assets/menu.js"></script>
+    <script src="./src/controllers/handleForm.js"></script>
+  </body>
+</html>
