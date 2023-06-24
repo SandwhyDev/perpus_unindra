@@ -12,6 +12,9 @@ var formBuku = document.getElementById("form-buku");
 const BtnSimpan = document.getElementById("btn-pinjam");
 const BtnHapus = document.getElementById("btn-hapus");
 const btnKeluar = document.getElementById("btn-keluar");
+const pdfContainer = document.querySelector(".pdfContainer");
+const pdfView = document.querySelector(".pdfView");
+const pdfClose = document.querySelector(".pdfClose");
 
 btnKeluar.className =
   "cursor-pointer bg-red-500 flex items-center justify-center text-white hover:bg-red-600 w-full p-2 rounded-md text-center capitalize";
@@ -86,7 +89,12 @@ function sendDataRequest(kategori) {
         // Membuat elemen gambar
         const gambarBuku = document.createElement("img");
         gambarBuku.src = buku.image_path;
-        gambarBuku.className = "w-full h-full object-cover rounded-2xl ";
+        gambarBuku.className =
+          "w-full h-full object-cover rounded-2xl cursor-pointer ";
+        gambarBuku.addEventListener("click", () => {
+          handlePdf(buku.id, buku.judul);
+        });
+
         bukuHTML.appendChild(gambarBuku);
 
         const judulBuku = document.createElement("h1");
@@ -187,9 +195,9 @@ function pinjamBuku(id, nama) {
 }
 
 function TambahBuku() {
-  dataBukuContainer.innerHTML = "";
-  // dataBukuContainer.className = "hidden";
+  $("li").removeClass("bg-blue-500 text-white");
 
+  dataBukuContainer.innerHTML = "";
   formBuku.style.display = "flex";
 }
 
@@ -203,4 +211,25 @@ function ButtonKeluar() {
     window.localStorage.removeItem("mahasiswa");
     window.localStorage.removeItem("nama_lengkap");
   }
+}
+
+function handlePdf(id, judul) {
+  pdfContainer.classList.remove("hidden");
+  pdfContainer.classList.add("flex");
+
+  var iframe = document.createElement("iframe");
+  iframe.className = "w-[600px] h-[700px] rounded-xl";
+  iframe.src = "./public/files/coba.pdf";
+
+  pdfClose.addEventListener("click", function () {
+    pdfContainer.classList.remove("flex");
+    pdfContainer.classList.add("hidden");
+
+    var existingIframe = pdfView.querySelector("iframe");
+    if (existingIframe) {
+      pdfView.removeChild(existingIframe);
+    }
+  });
+
+  pdfView.appendChild(iframe);
 }
