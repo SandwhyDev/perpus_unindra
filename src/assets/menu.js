@@ -190,6 +190,8 @@ function pinjamBuku(id, nama) {
         window.location.reload();
       }
     };
+
+    // kirim data ke php
     xhr.send("id_buku=" + id + "&action=pinjam");
   }
 }
