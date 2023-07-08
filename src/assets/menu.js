@@ -110,7 +110,7 @@ function sendDataRequest(kategori) {
         bukuHTML.appendChild(gambarBuku);
 
         const judulBuku = document.createElement("h1");
-        judulBuku.className = "sm:min-h-[48px]";
+        judulBuku.className = "min-h-[48px]";
         judulBuku.textContent = buku.judul;
         bukuHTML.appendChild(judulBuku);
 
