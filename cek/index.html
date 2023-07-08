@@ -10,6 +10,7 @@
       type="image/png"
     />
     <title>Tunggu...</title>
+    <script src="../env.js"></script>
   </head>
   <body>
     <div
@@ -24,16 +25,16 @@
     </div>
 
     <script>
+      const url = env.url;
+      console.log(url);
       window.addEventListener("load", function () {
         var loader = document.querySelector(".loader");
         setInterval(function () {
           var login = window.localStorage.getItem("login");
           if (login) {
-            window.location.href =
-              "https://sandwhydev.github.io/perpus_unindra";
+            window.location.href = url;
           } else {
-            window.location.href =
-              "https://sandwhydev.github.io/perpus_unindra/login";
+            window.location.href = `${url}/login`;
           }
         }, 3000);
 

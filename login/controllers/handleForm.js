@@ -75,7 +75,7 @@ form.addEventListener("submit", function (event) {
           console.log("halo mahasiswa");
         }
 
-        window.location.href = "http://localhost/perpustakaan_universitas";
+        window.location.href = env.url;
       }
     })
     .catch((error) => {

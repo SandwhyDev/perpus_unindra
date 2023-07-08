@@ -1,10 +1,12 @@
 var admin = window.localStorage.getItem("admin");
 
-console.log(admin);
-
 var menuSide = ["FIPPS", "FMIPA", "FBS", "FTIK", "FP"];
 
+console.log("ini env", env.url);
+console.log("ini admin");
+
 var menuContainer = document.getElementById("menu-container");
+const loader = document.getElementById("loader");
 const dataBukuContainer = document.getElementById("data-buku");
 const dataBuku = document.createElement("div");
 dataBuku.id = "dataBukuContainer1";
@@ -27,7 +29,7 @@ for (var i = 0; i < menuSide.length; i++) {
 
   menuContainer.appendChild(li);
 }
-menuContainer.className = "flex flex-col gap-2  h-full  w-full list-none ";
+menuContainer.className = "flex sm:flex-col gap-2  h-full  w-full list-none ";
 
 // Add active color to the clicked menu item
 $(document).ready(function () {
@@ -73,6 +75,7 @@ $(document).on("click", "li", function () {
 
 function sendDataRequest(kategori) {
   // dataBukuContainer.className = "w-60 h-52 flex flex-col gap-2 bg-green-500";
+  loader.className = "flex items-center justify-center w-full h-full"; // Menampilkan loader
 
   formBuku.style.display = "none";
 
@@ -81,6 +84,15 @@ function sendDataRequest(kategori) {
     .then((response) => response.json()) // Mengubah respons menjadi objek JSON
     .then((data) => {
       // Data berhasil diterima
+
+      if (data.length <= 0) {
+        console.log("buku tidak tersedia di prodi ini");
+        var bukuHTML = document.createElement("div");
+        const judulBuku = document.createElement("h1");
+        judulBuku.textContent = "Maaf belum ada buku tersedia di prodi ini";
+        bukuHTML.appendChild(judulBuku);
+        dataBukuContainer.appendChild(bukuHTML);
+      }
 
       // Lakukan manipulasi atau tampilkan data di HTML
       data.forEach((buku) => {
@@ -151,6 +163,8 @@ function sendDataRequest(kategori) {
 
         dataBukuContainer.appendChild(bukuHTML);
       });
+
+      loader.className = "hidden";
     })
     .catch((error) => {
       // Terjadi kesalahan saat mengambil data
@@ -198,6 +212,7 @@ function pinjamBuku(id, nama) {
 
 function TambahBuku() {
   $("li").removeClass("bg-blue-500 text-white");
+  loader.className = "hidden";
 
   dataBukuContainer.innerHTML = "";
   formBuku.style.display = "flex";
