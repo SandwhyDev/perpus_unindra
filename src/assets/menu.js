@@ -75,8 +75,7 @@ $(document).on("click", "li", function () {
 });
 
 function sendDataRequest(kategori) {
-  // dataBukuContainer.className = "w-60 h-52 flex flex-col gap-2 bg-green-500";
-  loader.className = "flex items-center justify-center w-full h-full"; // Menampilkan loader
+  loader.className = "flex items-center justify-center w-full h-auto"; // Menampilkan loader
 
   formBuku.style.display = "none";
 
@@ -98,7 +97,7 @@ function sendDataRequest(kategori) {
       // Lakukan manipulasi atau tampilkan data di HTML
       data.forEach((buku) => {
         var bukuHTML = document.createElement("div");
-        bukuHTML.className = "w-60 h-72 mb-[179px] ";
+        bukuHTML.className = "w-60 h-72 mb-[186px] ";
         // Membuat elemen gambar
         const gambarBuku = document.createElement("img");
         gambarBuku.src = buku.image_path;
@@ -111,6 +110,7 @@ function sendDataRequest(kategori) {
         bukuHTML.appendChild(gambarBuku);
 
         const judulBuku = document.createElement("h1");
+        judulBuku.className = "sm:min-h-[48px]";
         judulBuku.textContent = buku.judul;
         bukuHTML.appendChild(judulBuku);
 
