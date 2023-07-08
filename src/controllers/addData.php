@@ -45,8 +45,6 @@ if (move_uploaded_file($gambar['tmp_name'], $targetFile)) {
 
 $filename = basename($gambar['name']);
 
-echo "Gambar: " . $filename . "<br>";
-echo "API URL: " . $url . "/" . $filename;
 
 $path = $url . "/public" . "/files" . "/" . $filename;
 
