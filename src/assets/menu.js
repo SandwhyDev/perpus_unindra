@@ -24,12 +24,13 @@ btnKeluar.className =
 for (var i = 0; i < menuSide.length; i++) {
   var li = document.createElement("li");
   li.className =
-    "cursor-pointer hover:bg-blue-500 hover:text-white w-full p-2 rounded-md text-white text-center capitalize";
+    "cursor-pointer  hover:bg-blue-500 hover:text-white w-full p-2 rounded-md text-white text-center capitalize";
   li.textContent = menuSide[i];
 
   menuContainer.appendChild(li);
 }
-menuContainer.className = "flex sm:flex-col gap-2  h-full  w-full list-none ";
+menuContainer.className =
+  "flex sm:flex-col gap-2  h-full  w-full list-none overflow-x-scroll";
 
 // Add active color to the clicked menu item
 $(document).ready(function () {
