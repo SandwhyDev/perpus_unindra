@@ -33,7 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Login gagal
-        echo 'Login gagal. Silakan periksa username dan password Anda.';
+        $response = array(
+            'status' => 'error',
+            'message' => 'Login gagal'
+        );
     }
 
     header('Content-Type: application/json');

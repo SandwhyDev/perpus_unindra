@@ -2,6 +2,7 @@
 const rememberCheckbox = document.getElementById("remember");
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
+const loginError = document.getElementById("login-error");
 
 rememberCheckbox.addEventListener("change", function () {
   if (this.checked) {
@@ -76,6 +77,8 @@ form.addEventListener("submit", function (event) {
         }
 
         window.location.href = env.url;
+      } else if (result.status === "error") {
+        loginError.style.display = "block";
       }
     })
     .catch((error) => {

@@ -1,3 +1,6 @@
+const urlString = env.url;
+
+console.log(`ini url : ${urlString}`);
 // HANDLE IMAGE
 const fileNameSpan = document.getElementById("file-name");
 // Function to handle file input change event
@@ -52,6 +55,7 @@ form.addEventListener("submit", (e) => {
   formData.append("kategori", kategoriInput.value);
   formData.append("stok", parseInt(stokInput.value));
   formData.append("gambar", gambarInput.files[0]);
+  formData.append("url", urlString);
 
   //   // Mengirim data ke postData.php menggunakan metode POST
   fetch("./src/controllers/addData.php", {
