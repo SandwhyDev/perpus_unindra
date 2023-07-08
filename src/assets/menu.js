@@ -101,10 +101,6 @@ function sendDataRequest(kategori) {
         bukuHTML.className = "w-60 h-72 mb-[179px] ";
         // Membuat elemen gambar
         const gambarBuku = document.createElement("img");
-        gambarBuku.addEventListener("load", () => {
-          loader.style.display = "none";
-          gambarBuku.style.display = "block";
-        });
         gambarBuku.src = buku.image_path;
         gambarBuku.className =
           "w-full h-full object-cover rounded-2xl cursor-pointer ";
