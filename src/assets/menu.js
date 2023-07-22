@@ -2,9 +2,6 @@ var admin = window.localStorage.getItem("admin");
 
 var menuSide = ["FIPPS", "FMIPA", "FBS", "FTIK", "FP"];
 
-console.log("ini env", env.url);
-console.log("ini admin");
-
 var menuContainer = document.getElementById("menu-container");
 const loader = document.getElementById("loader");
 const dataBukuContainer = document.getElementById("data-buku");
@@ -15,8 +12,13 @@ const BtnSimpan = document.getElementById("btn-pinjam");
 const BtnHapus = document.getElementById("btn-hapus");
 const btnKeluar = document.getElementById("btn-keluar");
 const pdfContainer = document.querySelector(".pdfContainer");
+const ContainerFormEdit = document.getElementById("form_edit");
 const pdfView = document.querySelector(".pdfView");
 const pdfClose = document.querySelector(".pdfClose");
+const batalEditButton = document.getElementById("batal-edit");
+const submitEditButton = document.getElementById("submit_edit");
+
+var id_buku;
 
 btnKeluar.className =
   "cursor-pointer bg-red-500 flex items-center justify-center text-white hover:bg-red-600 w-full p-2 rounded-md text-center capitalize";
@@ -124,7 +126,9 @@ function sendDataRequest(kategori) {
         bukuHTML.appendChild(penulisDanTahun);
 
         const Tersedia = document.createElement("p");
-        Tersedia.textContent = `Tersedia : ${buku.tersedia}`;
+        Tersedia.textContent = `Tersedia : ${
+          buku.tersedia <= 0 ? 0 : buku.tersedia
+        }`;
         Tersedia.className = "text-md ";
         bukuHTML.appendChild(Tersedia);
 
@@ -138,28 +142,49 @@ function sendDataRequest(kategori) {
         tombolPinjam.addEventListener("click", () => {
           // Logika untuk memproses peminjaman buku
           if (buku.tersedia >= 1) {
-            pinjamBuku(buku.id, buku.judul); // Mengirim ID buku yang ingin dipinjam ke fungsi pinjamBuku
+            pinjamBuku(buku.id, buku.judul, buku.tersedia); // Mengirim ID buku yang ingin dipinjam ke fungsi pinjamBuku
           }
         });
         bukuHTML.appendChild(tombolPinjam);
 
         // // Tombol hapus
         const tombolHapus = document.createElement("button");
+        const tombolEdit = document.createElement("button");
+        const containerTombol = document.createElement("div");
         tombolHapus.textContent = "Hapus";
+        tombolEdit.textContent = "Edit";
 
         tombolHapus.addEventListener("click", () => {
           // Logika untuk memproses peminjaman buku
           HapusBuku(buku.id, buku.judul); // Mengirim ID buku yang ingin dipinjam ke fungsi pinjamBuku
         });
 
-        console.log("admin ", admin);
+        tombolEdit.addEventListener("click", () => {
+          // Logika untuk memproses peminjaman buku
+          EditBuku(
+            buku.id,
+            buku.judul,
+            buku.penulis,
+            buku.tahun_terbit,
+            buku.kategori,
+            buku.tersedia
+          ); // Mengirim ID buku yang ingin dipinjam ke fungsi pinjamBuku
+        });
 
         if (admin) {
-          bukuHTML.appendChild(tombolHapus);
-          BtnSimpan.className =
-            "cursor-pointer bg-green-500    text-white hover:bg-green-600  w-full p-2 rounded-md  text-center capitalize";
+          containerTombol.className = "w-full flex gap-5 ";
           tombolHapus.className =
             "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 w-full rounded mt-3";
+          tombolEdit.className =
+            "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 w-full rounded mt-3";
+
+          containerTombol.appendChild(tombolHapus);
+          containerTombol.appendChild(tombolEdit);
+
+          bukuHTML.appendChild(containerTombol);
+          // bukuHTML.appendChild(tombolEdit);
+          BtnSimpan.className =
+            "cursor-pointer bg-green-500    text-white hover:bg-green-600  w-full p-2 rounded-md  text-center capitalize";
         }
 
         dataBukuContainer.appendChild(bukuHTML);
@@ -196,18 +221,28 @@ function pinjamBuku(id, nama) {
   var konfirmasi = confirm("Ingin meminjam buku " + nama + "?");
 
   if (konfirmasi) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "./src/controllers/updateData.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        alert(`Buku ${nama} berhasil dipinjam`);
-        window.location.reload();
-      }
-    };
+    if (!pinjamBuku.executed) {
+      pinjamBuku.executed = true;
 
-    // kirim data ke php
-    xhr.send("id_buku=" + id + "&action=pinjam");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "./src/controllers/updateData.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            alert(`Buku ${nama} berhasil dipinjam`);
+            window.location.reload();
+          } else if (xhr.status === 401) {
+            alert("Maaf buku tidak tersedia di perpustakaan");
+            window.location.reload();
+          }
+        }
+      };
+
+      // Send data to PHP
+      var data = "id_buku=" + id + "&action=pinjam";
+      xhr.send(data);
+    }
   }
 }
 
@@ -251,3 +286,78 @@ function handlePdf(id, judul) {
 
   pdfView.appendChild(iframe);
 }
+
+function EditBuku(id, judul, penulis, tahun_terbit, program_studi, stok) {
+  ContainerFormEdit.classList.remove("hidden");
+  ContainerFormEdit.classList.add("flex");
+
+  const inputJudul = document.getElementById("judul");
+  const inputPenulis = document.getElementById("penulis");
+  const inputTahunTerbit = document.getElementById("tahun_terbit");
+  const inputProgramStudi = document.getElementById("Kategori");
+  const inputstok = document.getElementById("stok");
+
+  id_buku = id;
+  inputJudul.value = judul;
+  inputPenulis.value = penulis;
+  inputTahunTerbit.value = tahun_terbit;
+  inputProgramStudi.value = program_studi;
+  inputstok.value = stok;
+}
+
+batalEditButton.addEventListener("click", function (param) {
+  ContainerFormEdit.classList.remove("flex");
+  ContainerFormEdit.classList.add("hidden");
+});
+
+submitEditButton.addEventListener("click", function (param) {
+  const inputJudul = document.getElementById("judul").value;
+  const inputPenulis = document.getElementById("penulis").value;
+  const inputTahunTerbit = document.getElementById("tahun_terbit").value;
+  const inputProgramStudi = document.getElementById("Kategori").value;
+  const inputstok = document.getElementById("stok").value;
+
+  // console.log({
+  //   id: id_buku,
+  //   judul: inputJudul,
+  //   penulis: inputPenulis,
+  //   tahun_terbit: inputTahunTerbit,
+  //   program_studi: inputProgramStudi,
+  //   stok: inputstok,
+  // });
+
+  const data = {
+    id_buku: id_buku, // Anda harus mengganti id_buku dengan nilai ID buku yang sesuai
+    judul: inputJudul,
+    penulis: inputPenulis,
+    tahun_terbit: inputTahunTerbit,
+    program_studi: inputProgramStudi,
+    stok: inputstok,
+  };
+
+  // Membuat objek XMLHttpRequest
+  const xhr = new XMLHttpRequest();
+
+  // Mengatur request ke updateBuku.php dengan metode POST
+  xhr.open("POST", "./src/controllers/updateBuku.php", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  // Menghandle response dari server
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      console.log(xhr.responseText);
+      alert("data berhasil di update");
+      window.location.reload();
+    } else {
+      console.error("Terjadi kesalahan saat mengirim data.");
+    }
+  };
+
+  // Menghandle kesalahan koneksi
+  xhr.onerror = function () {
+    console.error("Terjadi kesalahan koneksi.");
+  };
+
+  // Mengirim data sebagai JSON ke server
+  xhr.send(JSON.stringify(data));
+});

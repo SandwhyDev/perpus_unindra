@@ -77,7 +77,7 @@ form.addEventListener("submit", function (event) {
         }
 
         window.location.href = env.url;
-      } else if (result.status === "error") {
+      } else if (result.status === "false") {
         loginError.style.display = "block";
       }
     })

@@ -27,6 +27,7 @@ if ($result->num_rows > 0) {
             'penulis' => $row["penulis"],
             'tahun_terbit' => $row["tahun_terbit"],
             'tersedia' => $row["stok"],
+            'kategori' => $row["kategori"],
             'image_path' => $row["gambar_path"],
         ];
         $data_buku[] = $buku;

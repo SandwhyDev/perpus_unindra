@@ -1,6 +1,5 @@
 const urlString = env.url;
 
-console.log(`ini url : ${urlString}`);
 // HANDLE IMAGE
 const fileNameSpan = document.getElementById("file-name");
 // Function to handle file input change event

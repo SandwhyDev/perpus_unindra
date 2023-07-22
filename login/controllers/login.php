@@ -9,12 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // echo "password : $password <br>";
 
-    // Query untuk memeriksa kecocokan username dan password
+    // Query untuk memeriksa kecocokan username
     $query = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($query);
 
-
     if ($result->num_rows > 0) {
+        // setelah cocok dan ketemu periksa password user yang di database sama password yang di kirim dari form
         $user = $result->fetch_assoc();
 
         if ($password === $user['password']) {
@@ -25,16 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'nama_lengkap' => $user['nama_lengkap']
             );
         } else {
+            // Kalo password salah
             $response = array(
-                'status' => 'error',
+                'status' => 'false',
                 'message' => 'Login gagal'
             );
 
         }
     } else {
-        // Login gagal
+        // Kalo username tidak ada
         $response = array(
-            'status' => 'error',
+            'status' => 'false',
             'message' => 'Login gagal'
         );
     }
