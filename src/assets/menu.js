@@ -362,6 +362,13 @@ const fileInput = document.getElementById("image-edit-input");
 fileInput.addEventListener("change", handleFileInputChange);
 
 submitEditButton.addEventListener("click", function (param) {
+  const text_submit = document.getElementById("text_submit");
+  const loader_submit = document.getElementById("loader_edit");
+
+  text_submit.classList.add("hidden");
+  loader_submit.classList.remove("hidden");
+  loader_submit.classList.add("flex");
+
   const inputJudul = document.getElementById("judul").value;
   const inputPenulis = document.getElementById("penulis").value;
   const inputTahunTerbit = document.getElementById("tahun_terbit").value;
@@ -396,7 +403,13 @@ submitEditButton.addEventListener("click", function (param) {
       console.log(data); // Handle the server response here
 
       if (data.status === "success") {
+        text_submit.classList.remove("hidden");
+        text_submit.classList.add("flex");
+
         alert("berhasil update Buku");
+
+        loader_submit.classList.remove("flex");
+        loader_submit.classList.add("hidden");
         window.location.reload();
         return;
       } else if (data.status === "error") {

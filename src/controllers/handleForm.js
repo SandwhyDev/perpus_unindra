@@ -42,8 +42,35 @@ const gambarInput = document.getElementById("image-input");
 
 // Menangani pengiriman data ketika tombol Submit ditekan
 form.addEventListener("click", () => {
-  // e.preventDefault(); // Mencegah tindakan bawaan formulir
-  // // Membuat objek FormData untuk mengirim data
+  const text_add = document.getElementById("text_add");
+  const loader_submit = document.getElementById("loader_add");
+
+  text_add.classList.add("hidden");
+
+  loader_submit.classList.remove("hidden");
+  loader_submit.classList.add("flex");
+
+  console.log(gambarInput.files[0]);
+
+  if (
+    !judulInput.value ||
+    !penulisInput.value ||
+    !penulisInput.value ||
+    !tahunTerbitInput.value ||
+    !kategoriInput.value ||
+    !stokInput.value ||
+    gambarInput.files[0] === undefined
+  ) {
+    alert("form harus di isi semua");
+    text_add.classList.remove("hidden");
+    text_add.classList.add("flex");
+
+    loader_submit.classList.remove("flex");
+    loader_submit.classList.add("hidden");
+
+    return false;
+  }
+
   const formData = new FormData();
   // Menambahkan nilai-nilai input ke objek FormData
   formData.append("judul", judulInput.value);
@@ -60,8 +87,12 @@ form.addEventListener("click", () => {
   })
     .then((response) => response.text())
     .then((data) => {
-      // Menangani respons dari postData.php
-      console.log(data); // Lakukan sesuatu dengan respons
+      text_add.classList.remove("flex");
+      text_add.classList.add("hidden");
+
+      loader_submit.classList.remove("flex");
+      loader_submit.classList.add("hidden");
+
       alert("berhasil simpan buku");
       window.location.reload();
     })
