@@ -58,22 +58,14 @@ form.addEventListener("submit", function (event) {
   })
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
-      console.log(result.status);
-      console.log(result.role);
-
       if (result.status === "success") {
         window.localStorage.setItem("login", true);
         window.localStorage.setItem("nama_lengkap", result.nama_lengkap);
 
         if (result.role === "admin") {
           window.localStorage.setItem("admin", true);
-
-          console.log("halo admin");
         } else if (result.role === "mahasiswa") {
           window.localStorage.setItem("mahasiswa", true);
-
-          console.log("halo mahasiswa");
         }
 
         window.location.href = env.url;

@@ -333,9 +333,16 @@ batalEditButton.addEventListener("click", function (param) {
 const fileNameSpan1 = document.getElementById("file-name");
 
 function handleFileInputChange(event) {
-  console.log("halo");
   const file = event.target.files[0];
   const reader = new FileReader();
+
+  const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+  if (file.size > maxSize) {
+    alert(
+      "Ukuran file melebihi batas maksimal (2MB). Silakan pilih file lain."
+    );
+    return false;
+  }
 
   const fileName = event.target.files[0].name;
   fileNameSpan1.textContent = fileName;
