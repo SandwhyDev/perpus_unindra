@@ -1,7 +1,7 @@
-const urlString = env.url;
+const urlString1 = env.url;
 
 // HANDLE IMAGE
-const fileNameSpan = document.getElementById("file-name");
+const fileNameSpan = document.getElementById("file-name-1");
 // Function to handle file input change event
 function handleFileInputChange(event) {
   const file = event.target.files[0];
@@ -28,25 +28,23 @@ function handleFileInputChange(event) {
 }
 
 // Attach event listener to file input
-const fileInput = document.getElementById("image-input");
-fileInput.addEventListener("change", handleFileInputChange);
+const fileInput1 = document.getElementById("image-input");
+fileInput1.addEventListener("change", handleFileInputChange);
 
 // Mendapatkan elemen-elemen formulir
-const form = document.querySelector("form");
-const judulInput = document.getElementById("judul");
-const penulisInput = document.getElementById("penulis");
-const tahunTerbitInput = document.getElementById("tahun_terbit");
-const kategoriInput = document.getElementById("Kategori");
-const stokInput = document.getElementById("stok");
+const form = document.getElementById("submit_tambah_buku");
+const judulInput = document.getElementById("judul1");
+const penulisInput = document.getElementById("penulis1");
+const tahunTerbitInput = document.getElementById("tahun_terbit1");
+const kategoriInput = document.getElementById("Kategori1");
+const stokInput = document.getElementById("stok1");
 const gambarInput = document.getElementById("image-input");
 
 // Menangani pengiriman data ketika tombol Submit ditekan
-form.addEventListener("submit", (e) => {
-  e.preventDefault(); // Mencegah tindakan bawaan formulir
-
-  // Membuat objek FormData untuk mengirim data
+form.addEventListener("click", () => {
+  // e.preventDefault(); // Mencegah tindakan bawaan formulir
+  // // Membuat objek FormData untuk mengirim data
   const formData = new FormData();
-
   // Menambahkan nilai-nilai input ke objek FormData
   formData.append("judul", judulInput.value);
   formData.append("penulis", penulisInput.value);
@@ -54,8 +52,7 @@ form.addEventListener("submit", (e) => {
   formData.append("kategori", kategoriInput.value);
   formData.append("stok", parseInt(stokInput.value));
   formData.append("gambar", gambarInput.files[0]);
-  formData.append("url", urlString);
-
+  formData.append("url", urlString1);
   //   // Mengirim data ke postData.php menggunakan metode POST
   fetch("./src/controllers/addData.php", {
     method: "POST",
@@ -65,7 +62,6 @@ form.addEventListener("submit", (e) => {
     .then((data) => {
       // Menangani respons dari postData.php
       console.log(data); // Lakukan sesuatu dengan respons
-
       alert("berhasil simpan buku");
       window.location.reload();
     })

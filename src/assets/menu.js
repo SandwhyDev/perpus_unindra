@@ -1,3 +1,5 @@
+const urlString = env.url;
+
 var admin = window.localStorage.getItem("admin");
 
 var menuSide = ["FIPPS", "FMIPA", "FBS", "FTIK", "FP"];
@@ -167,7 +169,8 @@ function sendDataRequest(kategori) {
             buku.penulis,
             buku.tahun_terbit,
             buku.kategori,
-            buku.tersedia
+            buku.tersedia,
+            buku.image_path
           ); // Mengirim ID buku yang ingin dipinjam ke fungsi pinjamBuku
         });
 
@@ -287,7 +290,15 @@ function handlePdf(id, judul) {
   pdfView.appendChild(iframe);
 }
 
-function EditBuku(id, judul, penulis, tahun_terbit, program_studi, stok) {
+function EditBuku(
+  id,
+  judul,
+  penulis,
+  tahun_terbit,
+  program_studi,
+  stok,
+  image_path
+) {
   ContainerFormEdit.classList.remove("hidden");
   ContainerFormEdit.classList.add("flex");
 
@@ -303,6 +314,15 @@ function EditBuku(id, judul, penulis, tahun_terbit, program_studi, stok) {
   inputTahunTerbit.value = tahun_terbit;
   inputProgramStudi.value = program_studi;
   inputstok.value = stok;
+
+  const previewImg = document.createElement("img");
+  previewImg.setAttribute("src", image_path);
+  previewImg.classList.add("preview-img");
+  previewImg.style.borderRadius = "4px"; // Menambahkan properti CSS untuk tampilan bulat
+
+  const previewDiv = document.getElementById("image-preview-1");
+  previewDiv.innerHTML = "";
+  previewDiv.appendChild(previewImg);
 }
 
 batalEditButton.addEventListener("click", function (param) {
@@ -310,54 +330,82 @@ batalEditButton.addEventListener("click", function (param) {
   ContainerFormEdit.classList.add("hidden");
 });
 
+const fileNameSpan1 = document.getElementById("file-name");
+
+function handleFileInputChange(event) {
+  console.log("halo");
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  const fileName = event.target.files[0].name;
+  fileNameSpan1.textContent = fileName;
+  //   fileNameSpan.className = "bg-white  border-2 border-blue-500  text-gray-700 rounded w-full py-2 px-4 cursor-pointer inline-block"
+
+  reader.onload = function (e) {
+    const previewImg = document.createElement("img");
+    previewImg.setAttribute("src", e.target.result);
+    previewImg.classList.add("preview-img");
+    previewImg.style.borderRadius = "4px"; // Menambahkan properti CSS untuk tampilan bulat
+
+    const previewDiv = document.getElementById("image-preview-1");
+    previewDiv.innerHTML = "";
+    previewDiv.appendChild(previewImg);
+  };
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+
+const fileInput = document.getElementById("image-edit-input");
+
+fileInput.addEventListener("change", handleFileInputChange);
+
 submitEditButton.addEventListener("click", function (param) {
   const inputJudul = document.getElementById("judul").value;
   const inputPenulis = document.getElementById("penulis").value;
   const inputTahunTerbit = document.getElementById("tahun_terbit").value;
   const inputProgramStudi = document.getElementById("Kategori").value;
-  const inputstok = document.getElementById("stok").value;
+  const inputStok = document.getElementById("stok").value;
 
-  // console.log({
-  //   id: id_buku,
-  //   judul: inputJudul,
-  //   penulis: inputPenulis,
-  //   tahun_terbit: inputTahunTerbit,
-  //   program_studi: inputProgramStudi,
-  //   stok: inputstok,
-  // });
+  const gambarInput = document.getElementById("image-edit-input");
 
-  const data = {
-    id_buku: id_buku, // Anda harus mengganti id_buku dengan nilai ID buku yang sesuai
-    judul: inputJudul,
-    penulis: inputPenulis,
-    tahun_terbit: inputTahunTerbit,
-    program_studi: inputProgramStudi,
-    stok: inputstok,
-  };
+  // Create a new FormData instance
+  const formData = new FormData();
 
-  // Membuat objek XMLHttpRequest
-  const xhr = new XMLHttpRequest();
+  // Append the values to the formData object
+  formData.append("id_buku", id_buku);
+  formData.append("judul", inputJudul);
+  formData.append("penulis", inputPenulis);
+  formData.append("tahun_terbit", inputTahunTerbit);
+  formData.append("Kategori", inputProgramStudi);
+  formData.append("stok", inputStok);
+  formData.append("gambar", gambarInput.files[0]);
+  formData.append("url", urlString);
 
-  // Mengatur request ke updateBuku.php dengan metode POST
-  xhr.open("POST", "./src/controllers/updateBuku.php", true);
-  xhr.setRequestHeader("Content-Type", "application/json");
+  console.log(formData);
 
-  // Menghandle response dari server
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      console.log(xhr.responseText);
-      alert("data berhasil di update");
-      window.location.reload();
-    } else {
-      console.error("Terjadi kesalahan saat mengirim data.");
-    }
-  };
+  // Now, you can use the formData object to send the data to the server via AJAX or fetch API
+  // For example:
+  fetch("./src/controllers/updateBuku.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); // Handle the server response here
 
-  // Menghandle kesalahan koneksi
-  xhr.onerror = function () {
-    console.error("Terjadi kesalahan koneksi.");
-  };
-
-  // Mengirim data sebagai JSON ke server
-  xhr.send(JSON.stringify(data));
+      if (data.status === "success") {
+        alert("berhasil update Buku");
+        window.location.reload();
+        return;
+      } else if (data.status === "error") {
+        alert("server error");
+        return;
+      }
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+      // Additional error handling if needed
+    });
 });
