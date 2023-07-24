@@ -90,6 +90,7 @@ form.addEventListener("click", () => {
   formData.append("gambar", gambarInput.files[0]);
   formData.append("url", urlString1);
   //   // Mengirim data ke postData.php menggunakan metode POST
+
   fetch("./src/controllers/addData.php", {
     method: "POST",
     body: formData,

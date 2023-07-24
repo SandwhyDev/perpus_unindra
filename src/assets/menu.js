@@ -203,7 +203,7 @@ function sendDataRequest(kategori) {
 
 function HapusBuku(id, nama) {
   var konfirmasi = confirm(
-    "Apakah Anda yakin ingin menghapus buku dengan ID " + nama + "?"
+    "Apakah Anda yakin ingin menghapus buku " + nama + "?"
   );
 
   if (konfirmasi) {
